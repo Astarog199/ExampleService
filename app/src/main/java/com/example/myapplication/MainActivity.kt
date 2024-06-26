@@ -14,6 +14,7 @@ import com.example.myapplication.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,6 +23,10 @@ class MainActivity : AppCompatActivity() {
     private val scope = CoroutineScope(Dispatchers.IO)
     private val handler = Handler(Looper.getMainLooper())
 
+    /**
+     * Объект ServiceConnection, который используется для управления
+     * связями между компонентами и сервисами.
+     */
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as ExampleService.localBinder
@@ -33,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             isServiceBound = false
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,11 +78,21 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     *  метод bindService привязвает сервис к текущему компоненту.
+     *    serviceIntent - указывает на сервис, который нужно привязать.
+     *    connection - используется для отслеживания состояния связи с сервисом.
+     *    - Context.BIND_AUTO_CREATE - если сервис еще не запущен,
+     *    он должен быть автоматически создан.
+     */
     private fun bindService() {
         val serviceIntent = Intent(this, ExampleService::class.java)
         bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE)
     }
 
+    /**
+     * Метод для разрыва связи с сервисом.
+     */
     private fun unbindService() {
         if (isServiceBound){
             unbindService(connection)

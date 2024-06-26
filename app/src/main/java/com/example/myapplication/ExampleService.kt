@@ -7,21 +7,19 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import kotlinx.coroutines.Runnable
 
 
-class ExampleService: Service() {
+class ExampleService : Service() {
     private var time = 11
     private val binder = localBinder()
     private val handler = Handler(Looper.getMainLooper())
     private var isRunning = false
 
-    inner class localBinder: Binder(){
+    inner class localBinder : Binder() {
         fun getService(): ExampleService = this@ExampleService
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int  {
-
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         stopSelf()
         return START_NOT_STICKY
     }
@@ -31,7 +29,7 @@ class ExampleService: Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder {
-        if (!isRunning){
+        if (!isRunning) {
             startCountdown()
             isRunning = false
         }
@@ -42,8 +40,8 @@ class ExampleService: Service() {
         return time
     }
 
-    fun restartCountdown(): Int{
-        return 10
+    fun restartCountdown(): Int {
+        return 11
     }
 
     private fun startCountdown(){
